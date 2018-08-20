@@ -1,12 +1,15 @@
 const assert = require('assert');
+const SerialPort = require('serialport/test');
 const MockBinding = require('./util/mockbinding');
 const DeviceManager = require('../src/manager');
 const MotionSensor = require('../src/motionsensorkit');
 const PixelKit = require('../src/retailpixelkit');
 
-let manager = new DeviceManager(MockBinding);
+SerialPort.Binding = MockBinding;
 
-describe('Available devices', () => {
+let manager = new DeviceManager(SerialPort);
+
+describe('Listing available devices', () => {
     it('Should not list devices without  pid and vid', (done) => {
         MockBinding.createPort('WRONG_DEVICE', {
             vendorId: undefined,
