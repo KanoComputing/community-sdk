@@ -10,7 +10,7 @@
 
 The community SDK are scripts, tools and libraries to help you to interact with your Kano Devices with your favourite programming language and on your choice of code editor. They are developed to be easy to understand and use in first place.
 
-## Who is those SDKs for?
+## What are those SDKs for?
 
 The goal is to provide a transition as smooth as possible between the block based experience from [Kano Code](https://apps.kano.me/) to a text based programming that might feel a bit more "real".
 
