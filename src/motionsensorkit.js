@@ -10,8 +10,8 @@ class MotionSensorKit extends RPCClient {
      *      contain at least a property with `path`.
      */
     constructor(options) {
-        if (!options.path) {
-            throw new Error('Path is required');
+        if (!options || !options.path) {
+            throw new Error('Path is required.');
         }
         super();
         if(options.SerialChannel) {

@@ -18,6 +18,16 @@ const getMockMSK = () => {
 }
 
 describe('Send and receive motion sensor data', () => {
+    it('Require serial port path', (done) => {
+        try {
+            const msk = new MotionSensor();
+            done(new Error(`Shouldn't be able to instantiate Motion Sensor without specifying its path.`))
+        } catch(e) {
+            assert.ok(e);
+            assert.equal(e.message, 'Path is required.');
+            done();
+        }
+    });
     it('Resolve promise once serial connection is stablished', (done) => {
         const msk = getMockMSK();
         msk.connect()
