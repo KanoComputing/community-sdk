@@ -40,11 +40,17 @@ class DeviceManager {
             let devicesPromise = serialPorts.map((port) => {
                 switch(vendorIds[port.vendorId]) {
                     case 'msk':
-                        let msk = new MotionSensor({path: port.comName});
+                        let msk = new MotionSensor({
+                            path: port.comName,
+                            SerialChannel: this.SerialChannel
+                        });
                         return msk.connect();
                         break;
                     case 'rpk':
-                        let rpk = new PixelKit({path: port.comName});
+                        let rpk = new PixelKit({
+                            path: port.comName,
+                            SerialChannel: this.SerialChannel
+                        });
                         return rpk.connect();
                         break;
                     default:
