@@ -7,6 +7,19 @@ const PixelKit = require('../src/retailpixelkit');
 let manager = new DeviceManager(MockBinding);
 
 describe('Available devices', () => {
+    it('Should not list devices without  pid and vid', (done) => {
+        MockBinding.createPort('WRONG_DEVICE', {
+            vendorId: undefined,
+            productId: undefined
+        });
+        manager.listConnectedDevices()
+            .then((devices) => {
+                assert.equal(devices.length, 0);
+                MockBinding.reset();
+                done();
+            })
+            .catch(done);
+    });
     it('Should not list devices with non-kano pid and vid', (done) => {
         MockBinding.createPort('WRONG_DEVICE', {
             vendorId: 'wrong',

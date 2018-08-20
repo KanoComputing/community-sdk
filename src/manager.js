@@ -32,9 +32,11 @@ class DeviceManager {
 
             // Filter only ids that exist on the `vendorIds` dictionary
             let serialPorts = ports.filter((port) => {
-                let vid = port.vendorId.toLowerCase();
-                let pid = port.productId.toLowerCase();
-                return vendorIds[vid] && productIds[pid];
+                if(port.vendorId && port.productId) {
+                    let vid = port.vendorId.toLowerCase();
+                    let pid = port.productId.toLowerCase();
+                    return vendorIds[vid] && productIds[pid];
+                }
             });
 
             let devicesPromise = serialPorts.map((port) => {
