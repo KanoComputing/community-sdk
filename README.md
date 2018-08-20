@@ -1,27 +1,22 @@
-# Kano Community SDK
+# NodeJS SDK
 
-## What is an SDK?
+## Requirements
 
-[From Wikipedia, the free encyclopedia](https://en.wikipedia.org/wiki/Software_development_kit):
+- [Node.js](https://nodejs.org/en/) v8.11.2 or higher
+- [Yarn](https://yarnpkg.com/en/) v1.7.0 or higher
+- [Git](https://git-scm.com/) v2.11.0 or higher
 
->A software development kit (SDK or devkit) is typically a set of software development tools that allows the creation of applications for a certain software package, software framework, hardware platform, computer system, video game console, operating system, or similar development platform.
+## Installing and running examples
 
-## What is the Community SDK?
-
-The community SDK are scripts, tools and libraries to help you to interact with your Kano Devices with your favourite programming language and on your choice of code editor. They are developed to be easy to understand and use in first place.
-
-## What are those SDKs for?
-
-The goal is to provide a transition as smooth as possible between the block based experience from [Kano Code](https://apps.kano.me/) to a text based programming that might feel a bit more "real".
-
-But it's also a great way integrate your Kano devices with other devices, apps, the Internet of things and beyond.
-
-If you are looking for a "production" ready SDK you will be better of with our Hardware SDK (coming soon).
-
-## What are the SDK available?
-
-- [Javascript/Node.js](#)
-- [Python](#)
+1. Clone this repo: `git clone git@github.com:KanoComputing/community-sdk.git`
+1. Navigate to the folder: `cd community-sdk`
+1. Checkout to `nodejs` branch: `git checkout nodejs`
+1. Install dependencies: `yarn install` (this might take a while)
+1. Connect your Kano device to your computer and turn it on (if it's possible).
+1. Run an example:
+    - For Motion Sensor: `node examples/msk_proximity_data.js`
+    - For Pixel Kit: `node examples/pk_stream_frame.js`
+1. Go wild!
 
 ## Do you have a problem?
 
