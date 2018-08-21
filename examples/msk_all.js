@@ -3,9 +3,8 @@ This example will toggle between proximity and gesture mode every 5 seconds,
 print both proximity and gestures when detected and set the polling interval
 to 500 ms.
 */
-const DeviceManager = require('./src/manager');
-const MotionSensor = require('./src/motionsensorkit');
-let manager = new DeviceManager();
+const DeviceManager = require('../src/manager');
+const MotionSensor = require('../src/motionsensorkit');
 
 // Set mode to proximity and schedule to change to gesture after 5 seconds
 const setProximity = (device) => {
@@ -28,7 +27,7 @@ const setGesture = (device) => {
         });
 }
 
-manager.listConnectedDevices()
+DeviceManager.listConnectedDevices()
 .then((devices) => {
     // Check if there are any Kano devices connected
     if(devices.length) {
