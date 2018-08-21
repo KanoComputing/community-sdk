@@ -20,9 +20,9 @@ If you are looking for a "production" ready SDK you will be better of with our H
 
 ## What are the SDK available?
 
-- [Javascript/Node.js](#)
-- [Python](#)
+- [Javascript/Node.js](https://github.com/KanoComputing/community-sdk/tree/nodejs)
+- [Python](https://github.com/KanoComputing/community-sdk/tree/python)
 
-## Do you have a problem?
+## Do you have a problem or a suggestion to make?
 
-Don't worry: [Tell us about it](https://github.com/KanoComputing/community-sdk/issues)!
+Please, [tell us about it](https://github.com/KanoComputing/community-sdk/issues)!
