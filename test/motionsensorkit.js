@@ -31,8 +31,8 @@ describe('Connect to motion sensor', () => {
         const msk = getMockMSK();
         msk.connect()
         .then((device) => {
-            assert.ok(device);
             assert.ok(device instanceof MotionSensor);
+            assert.ok(device.port.isOpen);
             assert.equal(device.port.path, MSK_PATH);
             MockBinding.reset();
             done();
