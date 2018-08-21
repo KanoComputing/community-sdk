@@ -8,6 +8,7 @@
 
 ## Installing and running examples
 
+1. Install [Kano Code](https://kano.me/app) (this will install all drivers you need).
 1. Clone this repo: `git clone git@github.com:KanoComputing/community-sdk.git`
 1. Navigate to the folder: `cd community-sdk`
 1. Checkout to `nodejs` branch: `git checkout nodejs`
