@@ -14,7 +14,7 @@
 1. Install dependencies: `yarn install` (this might take a while)
 1. Connect your Kano device to your computer and turn it on (if it's possible).
 1. Run an example:
-    - For Motion Sensor: `node examples/msk_proximity_data.js`
+    - For Motion Sensor: `node examples/msk_all.js`
     - For Pixel Kit: `node examples/pk_stream_frame.js`
 1. Go wild!
 
