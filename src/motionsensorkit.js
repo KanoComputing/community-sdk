@@ -14,12 +14,7 @@ class MotionSensorKit extends RPCClient {
             throw new Error('Path is required.');
         }
         super();
-        if(options.SerialChannel) {
-            this.SerialChannel = options.SerialChannel;
-        } else {
-            this.SerialChannel = SerialPort
-        }
-        this.port = new this.SerialChannel(options.path, {
+        this.port = new SerialPort(options.path, {
             baudRate: 115200,
             autoOpen: false
         });

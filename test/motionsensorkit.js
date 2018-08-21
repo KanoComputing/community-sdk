@@ -12,8 +12,7 @@ const getMockMSK = () => {
         productId: '814e'
     });
     return new MotionSensor({
-        path: MSK_PATH,
-        SerialChannel: SerialPort
+        path: MSK_PATH
     });
 }
 

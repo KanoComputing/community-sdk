@@ -11,13 +11,6 @@ const productIds = {
 }
 
 class DeviceManager {
-    constructor(SerialChannel) {
-        if(SerialChannel) {
-            this.SerialChannel = SerialChannel;
-        } else {
-            this.SerialChannel = SerialPort;
-        }
-    }
     /**
      * Request all the connected Kano devices. It resolves the promise with an array
      * of classes representing the connected devices and ready to use (no need to
@@ -25,8 +18,8 @@ class DeviceManager {
      *
      * @return {Promise}
      */
-    listConnectedDevices() {
-        return this.SerialChannel.list()
+    static listConnectedDevices() {
+        return SerialPort.list()
         .then((ports) => {
             let deviceTypes = Object.keys(vendorIds);
 

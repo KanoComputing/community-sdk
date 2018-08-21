@@ -7,15 +7,13 @@ const PixelKit = require('../src/retailpixelkit');
 
 SerialPort.Binding = MockBinding;
 
-let manager = new DeviceManager(SerialPort);
-
 describe('Listing available devices', () => {
     it('Should not list devices without  pid and vid', (done) => {
         MockBinding.createPort('WRONG_DEVICE', {
             vendorId: undefined,
             productId: undefined
         });
-        manager.listConnectedDevices()
+        DeviceManager.listConnectedDevices()
             .then((devices) => {
                 assert.equal(devices.length, 0);
                 MockBinding.reset();
@@ -28,7 +26,7 @@ describe('Listing available devices', () => {
             vendorId: 'wrong',
             productId: 'wrong'
         });
-        manager.listConnectedDevices()
+        DeviceManager.listConnectedDevices()
             .then((devices) => {
                 assert.equal(devices.length, 0);
                 MockBinding.reset();
@@ -45,7 +43,7 @@ describe('Listing available devices', () => {
             vendorId: '0403',
             productId: '6015'
         });
-        manager.listConnectedDevices()
+        DeviceManager.listConnectedDevices()
             .then((devices) => {
                 assert.equal(devices.length, 2);
                 MockBinding.reset();
@@ -62,7 +60,7 @@ describe('Listing available devices', () => {
             vendorId: '0403',
             productId: '6015'
         });
-        manager.listConnectedDevices()
+        DeviceManager.listConnectedDevices()
             .then((devices) => {
                 assert.equal(devices.length, 2);
                 assert.ok(devices[0] instanceof MotionSensor);
