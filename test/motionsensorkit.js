@@ -17,7 +17,7 @@ const getMockMSK = () => {
     });
 }
 
-describe('Send and receive motion sensor data', () => {
+describe('Connect to motion sensor', () => {
     it('Require serial port path', (done) => {
         try {
             const msk = new MotionSensor();
@@ -31,15 +31,17 @@ describe('Send and receive motion sensor data', () => {
     it('Resolve promise once serial connection is stablished', (done) => {
         const msk = getMockMSK();
         msk.connect()
-            .then((device) => {
-                assert.ok(device);
-                assert.ok(device instanceof MotionSensor);
-                assert.equal(device.port.path, MSK_PATH);
-                MockBinding.reset();
-                done();
-            })
-            .catch(done);
+        .then((device) => {
+            assert.ok(device);
+            assert.ok(device instanceof MotionSensor);
+            assert.equal(device.port.path, MSK_PATH);
+            MockBinding.reset();
+            done();
+        })
+        .catch(done);
     });
+});
+describe('Send motion sensor data', () => {
     it('Set mode to proximity', (done) => {
         const msk = getMockMSK();
         msk.once('rpc-request', (data) => {
@@ -139,6 +141,8 @@ describe('Send and receive motion sensor data', () => {
                 done();
             });
     });
+});
+describe('Receive motion sensor data/events', () => {
     it('Trigger correct event when get proximity data', (done) => {
         const mockProximity = 127;
         const msk = getMockMSK();
@@ -161,6 +165,19 @@ describe('Send and receive motion sensor data', () => {
         msk.connect()
             .then((device) => {
                 device.lineReader.emit('line', `{"type": "event", "name": "gesture", "detail": {"type": "${mockGesture}"}}`);
+            });
+    });
+    it('Trigger correct event when get error', (done) => {
+        const ERROR_MSG = "Couldn't decode JSON";
+        const msk = getMockMSK();
+        msk.once('error-message', (msg) => {
+            assert.ok(msg);
+            assert.equal(msg, ERROR_MSG)
+            done();
+        });
+        msk.connect()
+            .then((device) => {
+                device.lineReader.emit('line', `{"type": "event", "name": "error", "detail": { "msg": "${ERROR_MSG}" }}`);
             });
     });
 });

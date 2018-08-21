@@ -68,6 +68,10 @@ class RPCClient extends EventEmitter {
                         this.emit('error-message', data.err);
                         reject(new Error(data.err));
                         return;
+                    } else if (data.name === 'error') {
+                        this.emit('error-message', data.detail.msg);
+                        reject(new Error(data.detail.msg));
+                        return;
                     }
                     resolve(data);
                 }
