@@ -16,7 +16,7 @@
 1. Connect your Kano device to your computer and turn it on (if it's possible).
 1. Run an example:
     - For Motion Sensor: `node examples/msk_all.js`
-    - For Pixel Kit: `node examples/pk_stream_frame.js`
+    - For Pixel Kit: `node examples/rpk_stream_frame.js`
 1. Go wild!
 
 ## Do you have a problem?
