@@ -62,7 +62,6 @@ class RPCClient():
 				break
 			await asyncio.sleep(0.001)
 
-	@asyncio.coroutine
 	async def send(self, request_str):
 		if self.conn_send:
 			self.conn_send(request_str)
@@ -79,4 +78,7 @@ class RPCClient():
 			asyncio.ensure_future( self.wait_for_response(future, id) )
 		)
 		loop.run_until_complete(todo)
-		return future.result()
+		if future.cancelled():
+			raise TimeoutError('Request timed out')
+		else:
+			return future.result()
