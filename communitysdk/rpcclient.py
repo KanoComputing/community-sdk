@@ -27,10 +27,7 @@ class RPCClient():
 		self.requests[id] = None
 
 	def unregister_request(self, id):
-		try:
-			del self.requests[id]
-		except KeyError:
-			pass
+		del self.requests[id]
 
 	def set_response_data(self, id, data):
 		self.requests[id] = data
