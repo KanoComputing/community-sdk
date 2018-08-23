@@ -51,14 +51,10 @@ class RPCClient():
 			t += 1
 			if t > self.timeout:
 				future.cancel()
-				# Unregister/delete request from dictionary
-				self.unregister_request(id)
 				break
 			if self.get_response_data(id) != None:
 				# Set the future result
 				future.set_result(self.requests[id])
-				# Unregister/delete request from dictionary
-				self.unregister_request(id)
 				break
 			await asyncio.sleep(0.001)
 
@@ -78,7 +74,5 @@ class RPCClient():
 			asyncio.ensure_future( self.wait_for_response(future, id) )
 		)
 		loop.run_until_complete(todo)
-		if future.cancelled():
-			raise TimeoutError('Request timed out')
-		else:
-			return future.result()
+		self.unregister_request(id)
+		return future.result()
