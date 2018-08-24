@@ -19,9 +19,9 @@ None! Just download and install [Mu Editor](https://codewith.mu/).
 1. [Download the source files](https://github.com/KanoComputing/community-sdk/archive/python.zip) and unzip it (we recommend unzipping it to `mu_code` in your home folder)
 1. Open Mu Editor
 1. Switch to Python3 mode
-1. Load an example from `community-sdk-python/examples`:
-    - For Motion Sensor `msk_all.py`
-    - For Pixel Kit `rpk_stream_frame.py`
+1. Load an example from `community-sdk-python`:
+    - For Motion Sensor `example_motion_sensor.py`
+    - For Pixel Kit `example_pixel_kit.py`
 1. Press the "Run" button on Mu's toolbar.
 
 ### Without Mu Editor
@@ -31,5 +31,5 @@ None! Just download and install [Mu Editor](https://codewith.mu/).
 1. Checkout to `python` branch: `git checkout python`
 1. Install dependencies: `pip install pyserial`
 1. Run an example:
-    - For Motion Sensor `python examples/msk_all.py`
-    - For Pixel Kit `python examples/rpk_stream_frame.py`
+    - For Motion Sensor `python example_motion_sensor.py`
+    - For Pixel Kit `python example_pixel_kit.py`
