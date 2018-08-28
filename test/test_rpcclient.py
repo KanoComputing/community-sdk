@@ -77,43 +77,6 @@ def test_get_response_data(client):
 	response_data = client.get_response_data(id)
 	assert data == response_data
 
-def test_wait_for_response(client):
-	'''
-	Should wait until the value of a given key (`id`) on the `requests` dictionary
-	is set to something different than `None` then set this value as the result
-	of the `Future`.
-	'''
-	id = 'test-id'
-	data = {"success": True}
-	client.register_request(id)
-	# Schedule to set the response data after 0.1 seconds
-	def set_value():
-		sleep(0.1)
-		client.set_response_data(id, data)
-	loop = asyncio.get_event_loop()
-	pollingFuture = loop.run_in_executor(None, set_value)
-	# Wait for the response data to be filled
-	future = asyncio.Future()
-	loop.run_until_complete(
-		asyncio.ensure_future( client.wait_for_response(future, id) )
-	)
-	assert future.result() == data
-
-def test_wait_for_response_timeout(client):
-	'''
-	Timeout when response takes more than the threshold
-	'''
-	id = 'test-id'
-	data = {"success": True}
-	client.timeout = 100
-	client.register_request(id)
-	loop = asyncio.get_event_loop()
-	future = asyncio.Future()
-	loop.run_until_complete(
-		asyncio.ensure_future( client.wait_for_response(future, id) )
-	)
-	assert future.cancelled() == True
-
 def test_rpc_request(client):
 	'''
 	Should return `rpc_request` call with the result once data is set on

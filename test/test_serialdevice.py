@@ -3,6 +3,7 @@ from unittest.mock import patch
 from time import sleep
 import json
 import pytest
+import asyncio
 
 SERIAL_PATH = 'COM_TEST'
 @pytest.fixture
@@ -227,3 +228,24 @@ def test_on_event(device):
 		"value": None
 	}
 	device.on_event(data)
+
+def test_on_data_make_new_request(device):
+	'''
+	Should be able to make a new rpc request inside the `on_data` callback
+	'''
+	line = [b'{"type": "event","name": "eventname","detail": {"number": 127}}\r\n']
+	def conn_send(msg):
+		data = json.loads(msg)
+		device.set_response_data(data['id'], True)
+	with patch.object(device, 'serial_connect'),\
+		patch.object(device.connection, 'readline', side_effect=line),\
+		patch.object(device, 'write', side_effect=conn_send):
+		loop = asyncio.get_event_loop()
+		future = asyncio.Future()
+		def on_event(data):
+			response = device.rpc_request('method', ['param'])
+			future.set_result(response)
+		device.on_event = on_event
+		device.connect()
+		sleep(0.02) # Needs to wait > then 0.01 seconds to connect and start polling data
+		assert future.result()
