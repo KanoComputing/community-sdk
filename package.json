@@ -2,7 +2,7 @@
   "name": "community-sdk",
   "version": "0.1.0",
   "description": "Node.js modules for interacting with your favourite Kano device!",
-  "main": "main.js",
+  "main": "communitysdk.js",
   "repository": "git@github.com:KanoComputing/community-sdk.git",
   "author": "Kano",
   "license": "MIT",
