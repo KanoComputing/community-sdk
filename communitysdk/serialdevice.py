@@ -29,7 +29,7 @@ class SerialDevice(RPCClient):
 		else:
 			self.connection.close()
 			self.connection.open()
-		sleep(0.1)
+		sleep(0.01)
 
 	def close(self):
 		if self.connection.isOpen():
@@ -43,7 +43,7 @@ class SerialDevice(RPCClient):
 
 	def poll_data(self):
 		while self.is_connected:
-			sleep(0.01)
+			sleep(0.001)
 			msg = self.connection.readline()
 			try:
 				data = json.loads(msg.decode())
