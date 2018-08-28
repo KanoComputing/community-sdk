@@ -1,5 +1,7 @@
 # Kano Community SDK
 
+Check the [wiki](https://github.com/KanoComputing/community-sdk/wiki) for more information!
+
 ## What is an SDK?
 
 [From Wikipedia, the free encyclopedia](https://en.wikipedia.org/wiki/Software_development_kit):
