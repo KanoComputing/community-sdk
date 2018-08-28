@@ -12,11 +12,6 @@ for device in devices:
         break
 
 if pk != None:
-    def print_button(button_id):
-        print('Button', button_id, 'was pressed down')
-
-    pk.on_button_down = print_button
-
     colors = ['#ffffff', '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff']
     pk.stream_frame(['#000000']*128)
     sleep(0.1)
@@ -24,5 +19,6 @@ if pk != None:
         frame = [color]*128
         pk.stream_frame(frame)
         sleep(2)
+    pk.close()
 else:
     print('No Pixel Kit was found :(')
