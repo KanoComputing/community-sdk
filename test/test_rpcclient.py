@@ -3,6 +3,7 @@ from time import sleep
 import asyncio
 import json
 import pytest
+from unittest.mock import patch
 
 @pytest.fixture()
 def client():
@@ -118,30 +119,22 @@ def test_rpc_request(client):
 	Should return `rpc_request` call with the result once data is set on
 	`requests` object and unregister the request
 	'''
-	data = {"success": True}
-	def set_value():
-		sleep(0.1)
-		for id in client.requests.keys():
-			client.set_response_data(id, data)
-	loop = asyncio.get_event_loop()
-	pollingFuture = loop.run_in_executor(None, set_value)
-	result = client.rpc_request('method', ['param'])
-	assert result == data
-	assert client.requests == {}
+	response_data = {"success": True}
+	def conn_send(msg):
+		data = json.loads(msg)
+		client.set_response_data(data['id'], response_data)
+	with patch.object(client, 'conn_send', side_effect=conn_send):
+		result = client.rpc_request('method', ['param'])
+		assert result == response_data
+		assert client.requests == {}
 
 def test_conn_send(client):
 	'''
 	Should call `conn_send` when making a `rpc_request`
 	'''
-	client.called_conn_send = False
-	def conn_send(req_str):
-		client.called_conn_send = True
-	client.conn_send = conn_send
-	def set_value():
-		sleep(0.1)
-		for id in client.requests.keys():
-			client.set_response_data(id, "DONE")
-	loop = asyncio.get_event_loop()
-	pollingFuture = loop.run_in_executor(None, set_value)
-	result = client.rpc_request('method', ['params'])
-	assert client.called_conn_send == True
+	def conn_send(msg):
+		data = json.loads(msg)
+		client.set_response_data(data['id'], True)
+	with patch.object(client, 'conn_send', side_effect=conn_send):
+		result = client.rpc_request('method', ['params'])
+		client.conn_send.assert_called()
