@@ -91,6 +91,17 @@ def test_rpc_request(client):
 		assert result == response_data
 		assert client.requests == {}
 
+def test_rpc_request_timeout(client):
+	'''
+	Should return `rpc_request` call with the result once data is set on
+	`requests` object and unregister the request
+	'''
+	client.timeout = 10
+	with pytest.raises(TimeoutError) as err,\
+		patch.object(client, 'conn_send'):
+		result = client.rpc_request('method', ['param'])
+	assert "Request timed out" in str(err.value)
+
 def test_conn_send(client):
 	'''
 	Should call `conn_send` when making a `rpc_request`

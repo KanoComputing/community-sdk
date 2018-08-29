@@ -7,6 +7,7 @@ class RPCClient():
 
 	def __init__(self, conn_send=None):
 		self.requests = {}
+		self.timeout = 500
 		self.conn_send = conn_send
 
 	def get_request_object(self, method, params=[]):
@@ -47,11 +48,18 @@ class RPCClient():
 		request_str = self.get_request_string(request_obj)
 		id = request_obj['id']
 		self.register_request(id)
-		try:
-			self.send(request_str)
-			sleep(0.01)
+		self.send(request_str)
+		sleep(0.01)
+		timeout = 0
+		response = None
+		while True:
+			timeout += 1
 			response = self.get_response_data(id)
-			self.unregister_request(id)
-			return response
-		except TimeoutError as err:
-			raise TimeoutError(err)
+			if response != None:
+				break
+			if timeout > self.timeout:
+				raise TimeoutError('Request timed out')
+			sleep(0.01)
+
+		self.unregister_request(id)
+		return response
