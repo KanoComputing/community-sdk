@@ -1,9 +1,9 @@
 const DeviceManager = require('./src/manager');
-const MotionSensor = require('./src/motionsensorkit');
-const PixelKit = require('./src/retailpixelkit');
+const MotionSensorKit = require('./src/motionsensorkit');
+const RetailPixelKit = require('./src/retailpixelkit');
 
 module.exports = {
     DeviceManager: DeviceManager,
-    MotionSensor: MotionSensor,
-    PixelKit: PixelKit
+    MotionSensorKit: MotionSensorKit,
+    RetailPixelKit: RetailPixelKit
 }
