@@ -98,7 +98,6 @@ class RetailPixelKit extends RPCClient {
                 this.bindWebSocketEvents();
                 resolve(this);
             });
-            // this.ws.open();
         });
     }
     /**
