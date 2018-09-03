@@ -232,20 +232,25 @@ def test_on_event(device):
 def test_on_data_make_new_request(device):
 	'''
 	Should be able to make a new rpc request inside the `on_data` callback
+	XXX: This test passes but it fails with real device. Please fix that if
+	you know how.
+	https://gist.github.com/murilopolese/04f3aabdaf5d67192661f0bba34fbb8e
 	'''
-	line = [b'{"type": "event","name": "eventname","detail": {"number": 127}}\r\n']
+	def line_feed():
+		return b'{"type": "event","name": "eventname","detail": {"number": 127}}\r\n'
 	def conn_send(msg):
 		data = json.loads(msg)
 		device.set_response_data(data['id'], True)
 	with patch.object(device, 'serial_connect'),\
-		patch.object(device.connection, 'readline', side_effect=line),\
+		patch.object(device.connection, 'readline', side_effect=line_feed),\
 		patch.object(device, 'write', side_effect=conn_send):
-		loop = asyncio.get_event_loop()
-		future = asyncio.Future()
-		def on_event(data):
-			response = device.rpc_request('method', ['param'])
-			future.set_result(response)
-		device.on_event = on_event
 		device.connect()
-		sleep(0.02) # Needs to wait > then 0.01 seconds to connect and start polling data
+		asyncio.set_event_loop(device.loop)
+		future = asyncio.Future()
+		def on_event(event):
+			if event['name'] == 'eventname':
+				result = device.rpc_request('method', ['param'])
+				future.set_result(result)
+		device.on_event = on_event
+		sleep(0.2)
 		assert future.result()
