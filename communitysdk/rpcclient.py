@@ -51,7 +51,6 @@ class RPCClient():
 			t += 1
 			if t > self.timeout:
 				raise TimeoutError('Request timed out')
-				break
 			if self.get_response_data(id) != None:
 				# Return the value
 				return self.get_response_data(id)
@@ -70,11 +69,11 @@ class RPCClient():
 
 		asyncio.set_event_loop(self.loop)
 
-		tasks = [
+		tasks = asyncio.gather(
 			self.send(request_str),
 			self.wait_for_response(id)
-		]
-		self.loop.run_until_complete(asyncio.wait(tasks))
+		)
+		self.loop.run_until_complete(tasks)
 
 		result = self.get_response_data(id)
 		self.unregister_request(id)
