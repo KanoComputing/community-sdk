@@ -27,7 +27,7 @@ def test_on_data_event(rpk):
 	}
 	mode_changed = {
 		"type": "event",
-		"name": "mode-changed",
+		"name": "mode-change",
 		"detail": {"mode-id": "offline-1"}
 	}
 	with patch.object(rpk, 'on_button_down'),\

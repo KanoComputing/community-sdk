@@ -6,7 +6,7 @@ class RetailPixelKitSerial(SerialDevice):
 		super().__init__(path)
 
 	def on_event(self, data):
-		if data['name'] == 'mode-changed':
+		if data['name'] == 'mode-change':
 			self.on_dial(data['detail']['mode-id'])
 		if data['name'] == 'button-down':
 			self.on_button_down(data['detail']['button-id'])
