@@ -1,3 +1,8 @@
+'''
+This example will print the proximity value and the rate of change on proximity
+value in a format that can be used to plot graphs on Mu Editor.
+'''
+
 from communitysdk import list_connected_devices, MotionSensorKit
 
 devices = list_connected_devices()

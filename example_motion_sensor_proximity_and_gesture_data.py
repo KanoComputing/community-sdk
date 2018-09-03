@@ -2,6 +2,8 @@
 This example will switch to `gesture` mode when you move your hand close to the
 Motion Sensor Kit and will switch back to `proximity` mode when it recognizes
 the gesture "up".
+
+XXX: This example is broken
 '''
 
 from communitysdk import list_connected_devices, MotionSensorKit
