@@ -9,11 +9,11 @@ msk_filter = filter(lambda device: isinstance(device, MotionSensorKit), devices)
 msk = next(msk_filter, None) # Get first Motion Sensor Kit
 
 if msk == None:
-    print('No Motion Sensor was found :(')
+	print('No Motion Sensor was found :(')
 else:
-    def on_proximity(proximityValue):
-        print('Proximity value:', proximityValue)
-    msk.set_interval(500)
-    msk.set_mode('proximity')
-    msk.on_proximity = on_proximity
-    print('Move your hand above the Motion Sensor:')
+	def on_proximity(proximityValue):
+		print('Proximity value:', proximityValue)
+	msk.set_interval(500)
+	msk.set_mode('proximity')
+	msk.on_proximity = on_proximity
+	print('Move your hand above the Motion Sensor:')
