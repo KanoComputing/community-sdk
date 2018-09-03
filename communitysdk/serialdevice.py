@@ -19,8 +19,7 @@ class SerialDevice(RPCClient):
 		self.connection.port = self.path
 		self.serial_connect()
 		self.is_connected = True
-		loop = asyncio.get_event_loop()
-		loop.run_in_executor(None, self.poll_data)
+		self.loop.run_in_executor(None, self.poll_data)
 		self.conn_send = self.write
 
 	def serial_connect(self):
@@ -43,13 +42,13 @@ class SerialDevice(RPCClient):
 
 	def poll_data(self):
 		while self.is_connected:
-			sleep(0.001)
 			msg = self.connection.readline()
 			try:
 				data = json.loads(msg.decode())
 				self.on_data(data)
 			except Exception as e:
 				pass
+			sleep(0.01)
 
 	def on_data(self, data):
 		# MSK and RPK respond with different RPC formats

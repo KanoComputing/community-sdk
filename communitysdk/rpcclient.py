@@ -9,6 +9,7 @@ class RPCClient():
 		self.requests = {}
 		self.timeout = 500
 		self.conn_send = conn_send
+		self.loop = asyncio.get_event_loop()
 
 	def get_request_object(self, method, params=[]):
 		return {
@@ -39,6 +40,24 @@ class RPCClient():
 		except:
 			return None
 
+	@asyncio.coroutine
+	def wait_for_response(self, id):
+		'''
+		Wait until there is data in the `requests` dictionary for a given id/key
+		and set it as the result of the given `Future`.
+		'''
+		t = 0
+		while True:
+			t += 1
+			if t > self.timeout:
+				raise TimeoutError('Request timed out')
+				break
+			if self.get_response_data(id) != None:
+				# Return the value
+				return self.get_response_data(id)
+			yield from asyncio.sleep(0.01)
+
+	@asyncio.coroutine
 	def send(self, request_str):
 		if self.conn_send:
 			self.conn_send(request_str)
@@ -48,18 +67,15 @@ class RPCClient():
 		request_str = self.get_request_string(request_obj)
 		id = request_obj['id']
 		self.register_request(id)
-		self.send(request_str)
-		sleep(0.01)
-		timeout = 0
-		response = None
-		while True:
-			timeout += 1
-			response = self.get_response_data(id)
-			if response != None:
-				break
-			if timeout > self.timeout:
-				raise TimeoutError('Request timed out')
-			sleep(0.01)
 
+		asyncio.set_event_loop(self.loop)
+
+		tasks = [
+			self.send(request_str),
+			self.wait_for_response(id)
+		]
+		self.loop.run_until_complete(asyncio.wait(tasks))
+
+		result = self.get_response_data(id)
 		self.unregister_request(id)
-		return response
+		return result
