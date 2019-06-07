@@ -1,6 +1,14 @@
 from .serialdevice import SerialDevice
 from base64 import b64encode
 
+
+COLUMNS = 16
+ROWS = 8
+PIXEL_COUNT = COLUMNS * ROWS
+OFF = '#000000'
+BLANK_SCREEN = [OFF] * PIXEL_COUNT
+
+
 class RetailPixelKitSerial(SerialDevice):
 	def __init__(self, path):
 		super().__init__(path)
@@ -33,17 +41,48 @@ class RetailPixelKitSerial(SerialDevice):
 		return result.decode()
 
 	def stream_frame(self, frame):
-		'''
+		"""
 		Just send to serial, don't wait until `rpc-response`
-		'''
-		if len(frame) != 128:
-			raise Exception('Frame must contain 128 values')
-		encodedFrame = self.hex_to_base64(frame)
+		:param frame:
+		:return: None
+		"""
+		if len(frame) != PIXEL_COUNT:
+			exc = 'Frame must contain {} values'.format(PIXEL_COUNT)
+			raise Exception(exc)
+
+		encoded_frame = self.hex_to_base64(frame)
 		method = 'lightboard:on'
-		params = [{ 'map': encodedFrame }]
+		params = [{'map': encoded_frame}]
 		request_obj = self.get_request_object(method, params)
 		request_str = self.get_request_string(request_obj)
 		self.conn_send(request_str)
+
+	@classmethod
+	def coord_to_index(cls, x, y):
+		"""
+		Convert an x, y coordinate to an index in a frame list
+		:param x:
+		:param y:
+		:return: int
+		"""
+		return (y * COLUMNS + (x - COLUMNS)) - 1
+
+	@classmethod
+	def pixels_to_frame(cls, pixels):
+		"""
+		Create a frame list of hex colors
+		:param pixels: list tuple (x, y, color)
+		:return: list
+		"""
+		frame = BLANK_SCREEN.copy()
+		for x, y, color in pixels:
+			index = cls.coord_to_index(x, y)
+			frame[index] = color
+		return frame
+
+	def stream_pixels(self, pixels):
+		frame = RetailPixelKitSerial.pixels_to_frame(pixels)
+		self.stream_frame(frame)
 
 	def get_battery_status(self):
 		return self.rpc_request('battery-status', [])
