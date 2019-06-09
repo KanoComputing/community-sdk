@@ -174,3 +174,63 @@ def test_connect_to_wifi_wrong(rpk):
 			patch.object(rpk, 'rpc_request'):
 			rpk.connect_to_wifi(ssid, value)
 		assert "`password` must be a string" in str(err.value)
+
+
+def test_coord_to_index():
+	"""
+	Should return the correct index in the pixel array from x and y coordinates
+	"""
+	assert PixelKit.coord_to_index(1, 1) == 0
+	assert PixelKit.coord_to_index(16, 8) == 127
+
+
+@pytest.fixture
+def pixel1() -> tuple:
+	return 1, 1, '#ffffff'
+
+
+@pytest.fixture
+def pixel2() -> tuple:
+	return 16, 8, '#2b2b2b'
+
+
+class TestPixelsToFrame:
+	from communitysdk.retailpixelkit import BLANK_SCREEN
+
+	def test_empty_list(self):
+		"""
+		Should return a blank screen list when the pixels argument is an empty list
+		"""
+		assert PixelKit.pixels_to_frame([]) == self.BLANK_SCREEN
+
+	def test_pixels_to_frame(self, pixel1, pixel2):
+		"""
+		Should return a list with the pixels at the correct indices
+		"""
+		expected_frame = self.BLANK_SCREEN.copy()
+		color1 = pixel1[2]
+		color2 = pixel2[2]
+		expected_frame[0] = color1
+		expected_frame[127] = color2
+		assert PixelKit.pixels_to_frame([pixel1, pixel2]) == expected_frame
+
+
+class TestStreamPixels:
+	@pytest.fixture
+	def pixels(self, pixel1, pixel2) -> list:
+		return [pixel1, pixel2]
+
+	@pytest.fixture
+	def frame(self, pixels) -> list:
+		return PixelKit.pixels_to_frame(pixels)
+
+	def test_calls_pixels_to_frame(self, rpk, pixels, frame):
+		with patch.object(PixelKit, 'pixels_to_frame', return_value=frame) as pixels_to_frame, \
+				patch.object(rpk, 'stream_frame'):
+			rpk.stream_pixels(pixels)
+			pixels_to_frame.assert_called_with(pixels)
+
+	def test_calls_stream_frame(self, rpk, pixels, frame):
+		with patch.object(rpk, 'stream_frame') as stream_frame:
+			rpk.stream_pixels(pixels)
+			stream_frame.assert_called_with(frame)

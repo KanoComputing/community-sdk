@@ -12,14 +12,14 @@ pk_filter = filter(lambda device: isinstance(device, PixelKit), devices)
 pk = next(pk_filter, None)  # Get first Pixel Kit
 
 
-def get_random_hex()->str:
+def get_random_hex() -> str:
     random_number = randint(0, 16777215)  # number of possible colors
     hex_number = str(hex(random_number))
     hex_number = '#{}'.format(hex_number[2:])
     return hex_number
 
 
-def get_random_pixel()->tuple:
+def get_random_pixel() -> tuple:
     x = randint(1, COLUMNS)
     y = randint(1, ROWS)
     color = get_random_hex()
