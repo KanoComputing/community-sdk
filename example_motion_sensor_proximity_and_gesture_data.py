@@ -2,8 +2,6 @@
 This example will switch to `gesture` mode when you move your hand close to the
 Motion Sensor Kit and will switch back to `proximity` mode when it recognizes
 the gesture "up".
-
-XXX: This example is broken
 '''
 
 from communitysdk import list_connected_devices, MotionSensorKit
@@ -28,7 +26,7 @@ else:
 			print('Swipe your hand above the sensor. Swipe "up" to change to proximity mode.')
 
 	def on_gesture(gestureValue):
-		print('Gesture detected:', gesture)
+		print('Gesture detected:', gestureValue)
 		if gestureValue == 'up':
 			print('Changing now to proximity mode.')
 			msk.set_mode('proximity')
