@@ -1,30 +1,53 @@
-# Kano Community SDK
+# CSharp SDK
 
-Check the [wiki](https://github.com/KanoComputing/community-sdk/wiki) for more information!
+This is an implementation of the SDK to communicate with the Motion Sensor Kit using CSharp.
 
-## What are the SDK available?
+When integrating to your own project remember to add this to the Capabilities section of your package manifest
 
-- [Javascript/Node.js](https://github.com/KanoComputing/community-sdk/tree/nodejs)
-- [Python](https://github.com/KanoComputing/community-sdk/tree/python)
+```xml
+<DeviceCapability Name="serialcommunication">
+    <Device Id="vidpid:2341 814E">
+    <Function Type="name:serialPort"/>
+    </Device>
+</DeviceCapability>
+```
 
-## What is an SDK?
+Check out the project `MotionSensorDemo` in the Solution.
 
-[From Wikipedia, the free encyclopedia](https://en.wikipedia.org/wiki/Software_development_kit):
+Usage:
 
->A software development kit (SDK or devkit) is typically a set of software development tools that allows the creation of applications for a certain software package, software framework, hardware platform, computer system, video game console, operating system, or similar development platform.
+```csharp
+namespace MotionSensorDemo
+{
+    public sealed partial class MainPage : Page
+    {
+        public MainPage()
+        {
+            this.InitializeComponent();
+            InitMotion();
+        }
 
-## What is the Community SDK?
+        async void InitMotion()
+        {
+            // Get the first available sensor
+            MotionSensor m = await MotionSensor.Create();
 
-The community SDK are scripts, tools and libraries to help you to interact with your Kano Devices with your favourite programming language and on your choice of code editor. They are developed to be easy to understand and use in first place.
+            // Listen to changes
+            m.ProximityChanged += HandleProximityEvent;
 
-## What are those SDKs for?
+            // Start the read loop. Callm.StopLoop() to stop
+            m.StartLoop();
+        }
 
-The goal is to provide a transition as smooth as possible between the block based experience from [Kano Code](https://apps.kano.me/) to a text based programming that might feel a bit more "real".
+        void HandleProximityEvent(object sender, ProximityEventArgs e)
+        {
+            // The distance value is a number between 0 and 255
+            Value.Text = e.Proximity.ToString();
+        }
+    }
+}
+```
 
-But it's also a great way integrate your Kano devices with other devices, apps, the Internet of things and beyond.
+## Integration
 
-If you are looking for a "production" ready SDK you will be better of with our Hardware SDK (coming soon).
-
-## Do you have a problem or a suggestion to make?
-
-Please, [tell us about it](https://github.com/KanoComputing/community-sdk/issues)!
+You can build the KanoDevicesproject and integrate the final .dll in your projects
